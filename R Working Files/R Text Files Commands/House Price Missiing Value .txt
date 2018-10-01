@@ -1,0 +1,38 @@
+housetrain=read.csv(file.choose(),stringsAsFactors = F)
+housetest=read.csv(file.choose(),stringsAsFactors = F)
+totaldata=rbind(housetrain[-81],housetest) # rowbind
+# for row binding there must be equal num of columns 
+for (f in 1:length(names(totaldata))){
+  levels(housetrain[, f]) = levels(totaldata[, f])
+}
+# This code is for matching the levels within the variables
+sort(colSums(is.na(totaldata)),decreasing=T) # checking missing values
+str(totaldata) # Checking Data Types
+totaldatacat=totaldata[sapply(totaldata,is.character)] # split categorical columns
+totaldatanum=totaldata[sapply(totaldata,is.numeric)]# split numerical columns
+colnames(totaldatacat) # Column names
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+nonecols=c('Alley','Fence','MiscFeature','PoolQC','FireplaceQu')
+# fundamental datastructure of R is vectors. The vector startswith
+# lowercase c followed by paranthesis items seperated by copmmas
+for (col in nonecols){
+  totaldatacat[sapply(totaldatacat[col],is.na),col]="missing"
+}
+totaldatacat=sapply(totaldatacat,
+                    function(x) ifelse(is.na(x),names(which.max(table(x))),x))
+values=c('MSSubClass','OverallQual','OverallCond',
+         'YearBuilt','YearRemodAdd','GarageYrBlt','YrSold','MoSold')
+totaldataval=totaldatanum[values]
+totaldatanum=totaldatanum[,!colnames(totaldatanum) %in% values]
+# ! represents not equal to. %in% matching function
+totaldataval=sapply(totaldataval,
+                    function(x) ifelse(is.na(x),names(which.max(table(x))),x))
+totaldatanum=sapply(totaldatanum,
+                    function(x) ifelse(is.na(x),mean(x,na.rm=T),x))
+totaldatadf=data.frame(totaldatanum,totaldataval,totaldatacat)
+sort(colSums(is.na(totaldatadf)),decreasing = T)
+housetraindf=totaldatadf[1:1460,] # comma at end is row selection
+housetraindf=cbind(housetraindf,SalePrice=housetrain$SalePrice)
+housetestdf=totaldatadf[1461:2919,] # comma before is column selection
+housereg=lm(SalePrice~.,data=housetraindf[-1])
+housetestpredict=predict(housereg,housetestdf[-1])

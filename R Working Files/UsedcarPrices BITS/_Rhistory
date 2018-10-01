@@ -1,0 +1,142 @@
+usedcarprices=read.csv(file.choose())
+usedcarprices=read.csv(file.choose())
+head(usedcarprices)
+tail(usedcarprices) # Last 6 Obs of Data
+str(usedcarprices)
+nrow(usedcarprices)
+class(usedcarprices)
+summary(usedcarprices)
+summary(usedcarprices$Price)
+hist(usedcarprices$Price)
+boxplot(usedcarprices$Price)
+boxplot(usedcarprices$Price,horizontal = T)
+plot(density(usedcarprices$Price))
+hist(usedcarprices$Age)
+hist(usedcarprices$Age)
+hist(usedcarprices$Age)
+boxplot(usedcarprices$Age)
+boxplot(usedcarprices$Age,horizontal = T)
+plot(density(usedcarprices$Age))
+hist(usedcarprices$KM)
+hist(usedcarprices$KM)
+boxplot(usedcarprices$KM,horizontal = T)
+plot(density(usedcarprices$KM))
+table(usedcarprices$FuelType)
+table(usedcarprices$FuelType,usedcarprices$Automatic)
+table(usedcarprices$FuelType,usedcarprices$AutoType)
+aggregate(usedcarprices$Price~usedcarprices$FuelType,FUN=mean)
+aggregate(usedcarprices$Price~usedcarprices$FuelType,FUN=mean)
+aggregate(usedcarprices$Price~usedcarprices$AutoType,FUN=mean)
+aggregate(usedcarprices$Age~usedcarprices$AutoType,FUN=mean)
+aggregate(usedcarprices$KM~usedcarprices$AutoType,FUN=mean)
+aggregate(usedcarprices$Price~usedcarprices$MetColorType,FUN=mean)
+summary(usedcarprices$Price)
+usedcarprices$PriceType=ifelse(usedcarprices$Price>=12000,
+"Very High",ifelse(usedcarprices$Price>=10000,
+"High Price",ifelse(usedcarprices$Price>=8500,
+"MediumPrice","LowPrice")))
+table(usedcarprices$PriceType)
+usedcarprices$UsageType=ifelse(usedcarprices$KM>=90000,"Very Heavy Use",
+ifelse(usedcarprices$KM>=70000,"Heavyuse",
+ifelse(usedcarprices$KM>=50000,"Mediumuse","Lowuse")))
+table(usedcarprices$UsageType)
+t.test(usedcarprices$Price~usedcarprices$AutoType)
+t.test(usedcarprices$Price~usedcarprices$MetColorType)
+summary(aov(usedcarprices$Price~usedcarprices$FuelType))
+summary(aov(usedcarprices$Age~usedcarprices$FuelType))
+aggregate(usedcarprices$Age~usedcarprices$FuelType,FUN=mean)
+summary(aov(usedcarprices$Age~usedcarprices$FuelType))
+chisq.test(table(usedcarprices$FuelType,usedcarprices$UsageType))
+chisq.test(table(usedcarprices$AutoType,usedcarprices$UsageType))
+usedcarreg=lm(Price~.,data=usedcarprices)
+summary(usedcarreg) # Check the Output for AdjRSquared, model p-value
+plot(usedcarreg)
+sqrt(mean(usedcarreg$residuals^2))
+library("rpart", lib.loc="C:/Program Files/Microsoft/ML Server/R_SERVER/library")
+usedcarrpart=rpart(Price~.,data=usedcarprices)
+summary(usedcarrpart)
+library("rpart.plot", lib.loc="~/R/win-library/3.4")
+rpart.plot(usedcarrpart)
+usedcarrpart$variable.importance
+usedcarreg=lm(Price~.,data=usedcarprices[-1]) # Building the Model
+summary(usedcarreg) # Check the Output for AdjRSquared, model p-value
+plot(usedcarreg) # regression plots - 4 plots
+usedcarrpart$variable.importance
+usedcarrpart=rpart(Price~.,data=usedcarprices[-1])
+summary(usedcarrpart)
+rpart.plot(usedcarrpart) # package "rpart.plot"
+usedcarrpart$variable.importance
+rpartpredict=predict(usedcarrpart,type="vector")
+head(rpartpredict)
+library("randomForest", lib.loc="~/R/win-library/3.4")
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntrees=3000,do.trace=100)
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntrees=3000,do.trace=100)
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntree=3000,do.trace=100)
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntree=3000,do.trace=100)
+View(usedcarprices)
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntree=1000,do.trace=100)
+usedcarprices=read.csv(file.choose()) # import data
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntree=1000,do.trace=100)
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+ntree=3000,do.trace=100)
+print(usedcarrandforest)
+churndata=read.csv(file.choose())
+churndata1=churndata[-c(1,3,4)] # Negative Vector Indexing
+library("gbm", lib.loc="~/R/win-library/3.4")
+churndata2=churndata1
+churndata2$Churn=ifelse(churndata2$Churn=="True.",1,0)
+churngbm=gbm(Churn~.,data=churndata2,distribution="bernoulli",
+n.trees=1000)
+bestiter=gbm.perf(churngbm,method="OOB")
+bestiter=gbm.perf(churngbm,method="OOB")
+bestiter=gbm.perf(churngbm,method="OOB")
+bestiter=gbm.perf(churngbm,method="test")
+gbmpredict=predict(churngbm,type="class",n.trees=1000)
+gbmpredict=predict(churngbm,type="response",n.trees=1000)
+print(churngbm)
+table(churndata2$Churn,gbmpredict)
+churngbm=gbm(Churn~.,data=churndata2,distribution="bernoulli",
+n.trees=1000,cv.folds=1)
+churngbm=gbm(Churn~.,data=churndata2,distribution="bernoulli",
+n.trees=1000,cv.folds=1)
+churngbm=gbm(as.factor(Churn)~.,data=churndata1,distribution="bernoulli",
+n.trees=1000,cv.folds=1)
+churndata2=churndata1
+churndata2$Churn=ifelse(churndata2$Churn==" True.",1,0)
+table(churndata2$Churn)
+library("gbm", lib.loc="~/R/win-library/3.4")
+churngbm=gbm(Churn~.,data=churndata2,distribution="bernoulli",
+n.trees=3000,cv.folds=3)
+bestiter=gbm.perf(churngbm,method="cv")
+bestiter=gbm.perf(churngbm,method="cv")
+gbmpredict=predict(churngbm,bestiter,type="response")
+gbmpredict=predict(churngbm,bestiter,churndata2)
+gbmpredict=predict(churngbm,bestiter)
+bestiter=gbm.perf(churngbm,method="OOB")
+gbmpredict=predict(churngbm,bestiter)
+table(churndata2$Churn,gbmpredict)
+gbmpredict=predict(churngbm,churndata2,bestiter)
+table(churndata2$Churn,gbmpredict)
+table(churndata2$Churn,gbmpredict>0.5)
+library("gbm", lib.loc="~/R/win-library/3.4")
+churndata2=churndata1
+churndata2$Churn=ifelse(churndata2$Churn==" True.",1,0)
+table(churndata2$Churn)
+churngbm=gbm(Churn~.,data=churndata2,distribution="bernoulli",
+n.trees=3000,cv.folds=3)
+bestiter=gbm.perf(churngbm,method="cv")
+gbmpredict=predict(churngbm,churndata2,bestiter)
+table(churndata2$Churn,gbmpredict>0.5)
+(4282+28)/(4282+11+679+28)
+library("nnet", lib.loc="C:/Program Files/Microsoft/ML Server/R_SERVER/library")
+churnnnet=nnet(Churn~.,data=churndata1,size=10,maxit=100)
+print(churnnnet)
+churnnnetpredict=predict(churnnnet,type="class")
+table(churndata1$Churn,churnnnetpredict)
+summary(churnnnet)

@@ -1,0 +1,34 @@
+setup_twitter_oauth("Consumer Key (API Key)","Consumer Secret (API Secret)","Access Token","Access Token Secret")
+tweets=searchTwitter("#MeToo",lang="en",n=10000)
+write.csv(twListToDF(tweets),"tweets.csv")
+head(tweets)
+tweets=read.csv(file.choose())
+tweetstext=tweets$text # Use this command if you are using the csv file of tweets
+tweetstext=sapply(tweets,function(x) x$getText()) # Use this command if u have downloaded tweets directly
+tweetstext = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', tweetstext)
+tweetstext = gsub('@\\w+', '', tweetstext) # remove @ people
+tweetstext = gsub('[[:punct:]]', '', tweetstext) # remove punctuation
+tweetstext = gsub('[[:digit:]]', '', tweetstext) # remove Numbers
+tweetstext = gsub('http\\w+', '', tweetstext) # remove html links
+tweetstext = gsub('[ \t]{2,}', '', tweetstext) # remove unnecessary spaces
+tweetstext = gsub('^\\s+|\\s+$', '', tweetstext) # remove spaces
+tweetstext=tolower(tweetstext)
+tweetscorpus=Corpus(VectorSource(tweetstext))
+tweetscorpus=tm_map(tweetscorpus, function(x) removeWords(x,stopwords()))
+wordcloud(tweetscorpus,min.freq = 1,colors=brewer.pal(8, "Dark2"),max.words =200)
+sentiment=get_nrc_sentiment(tweetstext)
+barplot(sort(colSums(prop.table(sentiment))),horiz=TRUE,las=1)
+tweetsdtm = TermDocumentMatrix(tweetscorpus) 
+tweetsterms=findFreqTerms(tweetsdtm,lowfreq=100)
+tweetsterms
+findAssocs(tweetsdtm,"harassment",corlimit=0.20)
+findAssocs(tweetsdtm,"metoo",corlimit=0.10)
+tweetsdtm1 = removeSparseTerms(tweetsdtm, sparse=0.98)
+tweetsfit = hclust(dist(scale(tweetsdtm1)), method="ward.D")
+plot(tweetsfit,cex=0.6)
+tweetsdtm3=DocumentTermMatrix(tweetscorpus) 
+tweetsdtm3=removeSparseTerms(tweetsdtm3,0.999)
+tweetsdtm3=tweetsdtm3[rowSums(as.matrix(tweetsdtm3))>0,]
+tweetslda=LDA(tweetsdtm3,method="Gibbs",5)
+terms(tweetslda,10)
+

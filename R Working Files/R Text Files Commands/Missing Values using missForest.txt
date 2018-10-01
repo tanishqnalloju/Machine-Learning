@@ -1,0 +1,16 @@
+housetrain1=read.csv(file.choose())
+housetest1=read.csv(file.choose())
+totaldata1=rbind(housetrain1[-81],housetest1)
+for (f in 1:length(names(totaldata1))) {
+  levels(housetrain1[, f]) = levels(totaldata1[, f])
+}
+# package required "missForest"
+totaldata1impute=missForest(totaldata1,maxiter = 3)
+totaldata1impute$OOBerror
+finaldata=totaldata1impute$ximp
+housetraindf=finaldata[1:1460,]
+housetestdf=finaldata[1461:2919,]
+housetraindf1=cbind(housetraindf,SalePrice=housetrain1$SalePrice)
+housereg=lm(SalePrice~.,data=housetraindf1[-1])
+housetestpredict=predict(housereg,housetestdf[-1])
+head(housetestpredict)

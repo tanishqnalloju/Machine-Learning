@@ -1,0 +1,12 @@
+tweets=read.csv(file.choose())
+tweetstext=tweets$text # Use this command if you are #using the csv file of tweets
+tweetstext = gsub('(RT|via)((?:\\b\\W*@\\w+)+)', '', tweetstext)
+tweetstext = gsub('@\\w+', '', tweetstext) # remove @ people
+tweetstext = gsub('[[:punct:]]', '', tweetstext) # remove punctuation
+tweetstext = gsub('[[:digit:]]', '', tweetstext) # remove Numbers
+tweetstext = gsub('http\\w+', '', tweetstext) # remove html links
+tweetstext = gsub('[ \t]{2,}', '', tweetstext) # remove unnecessary spaces
+tweetstext = gsub('^\\s+|\\s+$', '', tweetstext) # remove spaces
+tweetstext=tolower(tweetstext)
+head(tweetstext)
+tweetscorpus=Corpus(VectorSource(tweetstext))

@@ -1,0 +1,100 @@
+usedcarprices=read.csv(file.choose()) # import data
+head(usedcarprices) # First 6 Obs of Data
+tail(usedcarprices) # Last 6 Obs of Data
+str(usedcarprices) # Data Structure & Data Type of Each Variable
+nrow(usedcarprices) # Num of rows
+ncol(usedcarprices) # Num of columns
+class(usedcarprices) # Data Structure 
+summary(usedcarprices) # Descriptive Stats for Numerical 
+# Frequancy Counts for Categorical or String Variables
+summary(usedcarprices$Price) # Summary of one Variable price
+hist(usedcarprices$Price) # Histogram
+boxplot(usedcarprices$Price,horizontal = T) # boxplot
+plot(density(usedcarprices$Price)) # Density Plot
+
+CREATE THE BOXPLOT, HISTOGRAM, DENSITY PLOT OF AGE & KM
+hist(usedcarprices$Age)
+boxplot(usedcarprices$Age,horizontal = T)
+plot(density(usedcarprices$Age))
+hist(usedcarprices$KM)
+boxplot(usedcarprices$KM,horizontal = T)
+plot(density(usedcarprices$KM))
+
+table(usedcarprices$FuelType) # Frequency Counts
+table(usedcarprices$FuelType,usedcarprices$AutoType)
+# Cross tabulation
+
+aggregate(usedcarprices$Price~usedcarprices$FuelType,FUN=mean)
+# Equivalent to Groupby function in Python
+
+# Is the Average price of Automatic & Manual Cars same
+aggregate(usedcarprices$Price~usedcarprices$AutoType,FUN=mean)
+# Is the Average Age of Automatic & Manual Cars same
+aggregate(usedcarprices$Age~usedcarprices$AutoType,FUN=mean)
+# Is the Average KM of Automatic & Manual Cars same
+aggregate(usedcarprices$KM~usedcarprices$AutoType,FUN=mean)
+# Is the Average price of MetColor & NonMetcolor Cars same
+aggregate(usedcarprices$Price~usedcarprices$MetColorType,FUN=mean)
+
+summary(usedcarprices$Price)
+usedcarprices$PriceType=ifelse(usedcarprices$Price>=12000,
+                               "Very High",ifelse(usedcarprices$Price>=10000,
+                                                  "High Price",ifelse(usedcarprices$Price>=8500,
+                                                                      "MediumPrice","LowPrice")))
+table(usedcarprices$PriceType)
+usedcarprices$UsageType=ifelse(usedcarprices$KM>=90000,"Very Heavy Use",
+                               ifelse(usedcarprices$KM>=70000,"Heavyuse",
+                                      ifelse(usedcarprices$KM>=50000,"Mediumuse","Lowuse")))
+table(usedcarprices$UsageType)
+
+# NULL - There is no significant difference Average in Prices 
+ # of Automatic & Manual Cars - Both Means are Equal
+# Alternate - There is significant difference Average in Prices 
+ # of Automatic & Manual Cars - Both Means are Not Equal
+t.test(usedcarprices$Price~usedcarprices$AutoType)
+# Since p-value greater than 0.05, ACCEPT NULL or FAIL TO REJECT NULL
+
+# NULL - There is no significant difference Average in Prices 
+# of Metcolor & nonMetcolor Cars - Both Means are Equal
+# Alternate - There is significant difference Average in Prices 
+# of Metcolor & NonMetcolor Cars - Both Means are Not Equal
+t.test(usedcarprices$Price~usedcarprices$MetColorType)
+
+# NULL - There is no significant difference Average in Prices 
+# of Petrol,Diesel & CNG Cars - ALL Means are Equal
+# Alternate - There is significant difference Average in Prices 
+# of Petrol,Diesel & CNG Cars Cars - ALL Means are Not Equal
+summary(aov(usedcarprices$Price~usedcarprices$FuelType))
+# ANOVA SINGLE FACTOR
+
+# NULL - There is no significant difference Average in AGE
+# of Petrol,Diesel & CNG Cars - ALL Means are Equal
+# Alternate - There is significant difference Average in AGE 
+# of Petrol,Diesel & CNG Cars Cars - ALL Means are Not Equal
+aggregate(usedcarprices$Age~usedcarprices$FuelType,FUN=mean)
+summary(aov(usedcarprices$Age~usedcarprices$FuelType))
+
+# Null - There is no relationship between FuelType & UsageType
+# Alternate - Thers is relationship between FuelType & UsageType
+chisq.test(table(usedcarprices$FuelType,usedcarprices$UsageType))
+
+# Null - There is no relationship between AutoType & UsageType
+# Alternate - Thers is relationship between AutoType & UsageType
+chisq.test(table(usedcarprices$AutoType,usedcarprices$UsageType))
+
+# Linear Regression Model
+usedcarreg=lm(Price~.,data=usedcarprices[-1]) # Building the Model
+summary(usedcarreg) # Check the Output for AdjRSquared, model p-value
+# independent variable p-value
+plot(usedcarreg) # regression plots - 4 plots
+sqrt(mean(usedcarreg$residuals^2)) # RMSE
+
+# DECISION TREE MODEL # package required "rpart"
+usedcarrpart=rpart(Price~.,data=usedcarprices[-1])
+summary(usedcarrpart)
+rpart.plot(usedcarrpart) # package "rpart.plot"
+
+# RANDOM FORESR # package required "randomForest"
+usedcarrandforest=randomForest(Price~.,data=usedcarprices[-1],
+                               ntree=3000,do.trace=100)
+print(usedcarrandforest)

@@ -1,0 +1,134 @@
+housetrain=read.csv(file.choose())
+housetest=read.csv(file.choose())
+totaldata=rbind(housetrain[-81],housetest) # rowbind
+for (f in 1:length(names(totaldata))){
+levels(housetrain[, f]) = levels(totaldata[, f])
+}
+for (f in 1:length(names(totaldata)))
+{
+levels(housetrain[, f]) = levels(totaldata[, f])
+}
+for (f in 1:length(names(totaldata))){
+levels(housetrain[, f]) = levels(totaldata[, f])
+}
+sort(colSums(is.na(totadata)),decreasing=T)
+sort(colSums(is.na(totaldata)),decreasing=T)
+str(totaldata) # Checking Data Types
+totaldatacat=totaldata[sapply(totaldata,is.factor)]
+totaldatanum=totaldata[sapply(totaldata,is.numeric)]
+totaldatacat.columns
+totaldatacat.colnames
+colnames(totaldatacat)
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+nonecols=c('Alley','Fence','MiscFeature','PoolQC','FireplaceQu')
+for (col in nonecols){
+totaldatacat[sapply(totaldatacat[col],is.na),col]="No Value"
+}
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+for (col in nonecols){
+totaldatacat[sapply(totaldatacat[col],is.na),col]="missing"
+}
+housetrain=read.csv(file.choose(),stringsAsFactors = F)
+housetest=read.csv(file.choose(),stringsAsFactors = F)
+totaldata=rbind(housetrain[-81],housetest) # rowbind
+for (f in 1:length(names(totaldata))){
+levels(housetrain[, f]) = levels(totaldata[, f])
+}
+sort(colSums(is.na(totaldata)),decreasing=T) # checking missing values
+str(totaldata) # Checking Data Types
+totaldatacat=totaldata[sapply(totaldata,is.character)] # split categorical columns
+totaldatanum=totaldata[sapply(totaldata,is.numeric)]# split numerical columns
+colnames(totaldatacat) # Column names
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+nonecols=c('Alley','Fence','MiscFeature','PoolQC','FireplaceQu')
+for (col in nonecols){
+totaldatacat[sapply(totaldatacat[col],is.na),col]="missing"
+}
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+totaldatacat=sapply(totaldatacat,
+function(x) ifelse(is.na(x),names(which.max(table(x))),x))
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+totaldatavalues=totaldatanum[values]
+totaldataval=totaldatanum[values]
+totaldatanum=totaldatanum[,!colnames(totaldatanum) %in% values]
+values=c('MSSubClass','OverallQual','OverallCond',
+'YearBuilt','YearRemodAdd','GarageYrBlt','YrSold','MoSold')
+totaldataval=totaldatanum[values]
+totaldatanum=totaldatanum[,!colnames(totaldatanum) %in% values]
+View(totaldata)
+View(totaldata)
+totaldataval=sapply(totaldataval,
+function(x) ifelse(is.na(x),names(which.max(table(x))),x))
+totaldatanum=sapply(totaldatanum,
+function(x) ifelse(is.na(x),mean(x,na.rm=T),x))
+totaldatadf=data.frame(totaldatanum,totaldataval,totaldatacat)
+sort(colSums(is.na(totaldatadf)),decreasing = T)
+housetrain=totaldatadf[1:1460,]
+housetest=totaldatadf[1461:2919,]
+housetrain=read.csv(file.choose(),stringsAsFactors = F)
+totaldatadf=data.frame(totaldatanum,totaldataval,totaldatacat,
+SalePrice=housetrain$SalePrice)
+sort(colSums(is.na(totaldatadf)),decreasing = T)
+housetraindf=totaldatadf[1:1460,] # comma at end is row selection
+housetestdf=totaldatadf[1461:2919,] # comma before is column selection
+housereg=lm(SalePrice~.,data=housetestdf[-1])
+housereg=lm(SalePrice~.,data=housetraindf[-1])
+str(totaldatadf)
+totaldatadf=data.frame(totaldatanum,totaldataval,totaldatacat)
+housetraindf=cbind(housetraindf,SalePrice=housetrain$SalePrice)
+housereg=lm(SalePrice~.,data=housetraindf[-1])
+housetestpredict=predict(housereg,housetestdf[-1])
+totaldata=rbind(housetrain[-81],housetest) # rowbind
+for (f in 1:length(names(totaldata))){
+levels(housetrain[, f]) = levels(totaldata[, f])
+}
+sort(colSums(is.na(totaldata)),decreasing=T) # checking missing values
+str(totaldata) # Checking Data Types
+totaldatacat=totaldata[sapply(totaldata,is.character)] # split categorical columns
+totaldatanum=totaldata[sapply(totaldata,is.numeric)]# split numerical columns
+colnames(totaldatacat) # Column names
+sort(colSums(is.na(totaldatacat)),decreasing=T)
+nonecols=c('Alley','Fence','MiscFeature','PoolQC','FireplaceQu')
+for (col in nonecols){
+totaldatacat[sapply(totaldatacat[col],is.na),col]="missing"
+}
+totaldatacat=sapply(totaldatacat,
+function(x) ifelse(is.na(x),names(which.max(table(x))),x))
+values=c('MSSubClass','OverallQual','OverallCond',
+'YearBuilt','YearRemodAdd','GarageYrBlt','YrSold','MoSold')
+totaldataval=totaldatanum[values]
+totaldatanum=totaldatanum[,!colnames(totaldatanum) %in% values]
+totaldataval=sapply(totaldataval,
+function(x) ifelse(is.na(x),names(which.max(table(x))),x))
+totaldatanum=sapply(totaldatanum,
+function(x) ifelse(is.na(x),mean(x,na.rm=T),x))
+totaldatadf=data.frame(totaldatanum,totaldataval,totaldatacat)
+sort(colSums(is.na(totaldatadf)),decreasing = T)
+housetraindf=totaldatadf[1:1460,] # comma at end is row selection
+housetraindf=cbind(housetraindf,SalePrice=housetrain$SalePrice)
+housetestdf=totaldatadf[1461:2919,] # comma before is column selection
+housereg=lm(SalePrice~.,data=housetraindf[-1])
+housetestpredict=predict(housereg,housetestdf[-1])
+housetestpredict=predict(housereg,housetestdf[-1])
+housetrain1=read.csv(file.choose())
+housetest1=read.csv(file.choose())
+totaldata1=rbind(housetrain1[-81],housetest1)
+for (f in 1:length(names(totaldata1))) {
+levels(housetrain1[, f]) = levels(totaldata1[, f])
+}
+library("mice", lib.loc="~/R/win-library/3.4")
+totaldata1impute=mice(totaldata1,m=3,maxit=3)
+totaldata1impute=mice(totaldata1,m=2,maxit=2)
+totaldata1impute=mice(totaldata1,m=1,maxit=5)
+totaldata1impute=mice(totaldata1)
+library("missForest", lib.loc="~/R/win-library/3.4")
+totaldata1impute=missForest(totaldata1)
+totaldata1impute$OOBerror
+finaldata=totaldata1impute$ximp
+housetraindf=finaldata[1:1460,]
+housetestdf=finaldata[1461:2919,]
+housetraindf1=cbind(housetraindf,SalePrice=housetrain1$SalePrice)
+housereg=lm(SalePrice~.,data=housetraindf1[-1])
+housetestpredict=predict(housereg,housetestdf[-1])
+head(housetestpredict)
+library("missForest", lib.loc="~/R/win-library/3.4")
